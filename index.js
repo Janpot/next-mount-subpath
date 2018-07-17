@@ -16,7 +16,12 @@ app.prepare()
     const server = express();
 
     const handle = app.getRequestHandler();
-    server.use(`/test`, handle);
+    server.use('/test', (req, res) => {
+      if (!/^\/(?:static|_next)\//.test(req.url)) {
+        req.url = req.originalUrl;
+      }
+      handle(req, res);
+    });
 
     server.listen(port, (err) => {
       if (err) throw err;
