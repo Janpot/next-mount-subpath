@@ -1,4 +1,5 @@
 import { withRouter } from 'next/router';
+import React from 'react';
 
 const PathPrinter = withRouter(function ({ router }) {
   return (
@@ -9,6 +10,18 @@ const PathPrinter = withRouter(function ({ router }) {
   );
 });
 
-export default function Index () {
-  return <PathPrinter />;
+export default class extends React.Component {
+  static async getInitialProps ({ req }) {
+    const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+    return { userAgent };
+  }
+
+  render () {
+    return (
+      <div>
+        {this.props.userAgent}
+        <PathPrinter />
+      </div>
+    );
+  }
 }
